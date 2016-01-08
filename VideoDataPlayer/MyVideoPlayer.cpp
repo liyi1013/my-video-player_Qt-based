@@ -88,7 +88,7 @@ MyVideoPlayer::MyVideoPlayer(QWidget *parent)
 MyVideoPlayer::~MyVideoPlayer()
 {
 }
-
+/*
 bool MyVideoPlayer::Open_File(const QString &filename)
 {
 	if (!filename.isEmpty()) {
@@ -101,6 +101,7 @@ bool MyVideoPlayer::Open_File(const QString &filename)
 	}
 	return false;
 }
+*/
 
 bool MyVideoPlayer::Open_File()
 {
