@@ -12,6 +12,9 @@ class QAbstractButton;
 class QLabel;
 class QComboBox;
 
+
+// ÊÓÆµ²¥·ÅÆ÷Àà
+
 class MyVideoPlayer : public QWidget
 {
 	Q_OBJECT
