@@ -21,7 +21,7 @@ public:
 	~MyVideoPlayer();
 
 public:
-	//bool Open_File(const QString &filename);
+	bool Open_File(const QString &filename);
 	bool Open_File();
 
 public slots:

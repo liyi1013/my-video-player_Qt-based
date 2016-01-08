@@ -85,12 +85,10 @@ MyVideoPlayer::MyVideoPlayer(QWidget *parent)
 	this->setLayout(layout);
 }
 
-
 MyVideoPlayer::~MyVideoPlayer()
 {
 }
 
-/*
 bool MyVideoPlayer::Open_File(const QString &filename)
 {
 	if (!filename.isEmpty()) {
@@ -103,7 +101,6 @@ bool MyVideoPlayer::Open_File(const QString &filename)
 	}
 	return false;
 }
-*/
 
 bool MyVideoPlayer::Open_File()
 {
@@ -113,7 +110,6 @@ bool MyVideoPlayer::Open_File()
 		_mediaPlayer.setMedia(QUrl::fromLocalFile(filename));
 
 		_playButton->setEnabled(true);
-
 
 		this->play();
 
