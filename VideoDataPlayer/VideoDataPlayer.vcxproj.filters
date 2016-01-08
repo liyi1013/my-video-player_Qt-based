@@ -59,6 +59,24 @@
     <ClCompile Include="GeneratedFiles\Release\moc_MyVideoPlayer.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="plotdata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_plotdata.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_plotdata.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="qcustomplot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_qcustomplot.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_qcustomplot.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="videodataplayer.h">
@@ -75,6 +93,12 @@
     </CustomBuild>
     <CustomBuild Include="GeneratedFiles\ui_videodataplayer.h">
       <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="plotdata.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="qcustomplot.h">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
