@@ -22,21 +22,25 @@ MyVideoPlayer::MyVideoPlayer(QWidget *parent)
 	 _playButton(0), 
 	 _positionSlider(0)
 {
-	_videoWidget = new QVideoWidget;
+	QBoxLayout *layout_main = new QVBoxLayout(this);   // layout 的顺序不能错，一定要最外层的放最上面
+	QBoxLayout *controlLayout = new QHBoxLayout(this);
+	QBoxLayout *InfoLayout = new QHBoxLayout(this);
+
+	_videoWidget = new QVideoWidget(this);
 	_videoWidget->setMinimumSize(320, 240);
 
-	QPushButton *openButton = new QPushButton(tr("Open..."));
+	QPushButton *openButton = new QPushButton(tr("Open..."),this);
+	//connect(openButton, &QPushButton::clicked, this, &MyVideoPlayer::Open_File);
+	openButton->setDisabled(true);
 
-	connect(openButton, &QPushButton::clicked, this, &MyVideoPlayer::Open_File);
-
-	_playButton = new QPushButton;
+	_playButton = new QPushButton(this);
 	_playButton->setEnabled(false);
 
 	_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 
 	connect(_playButton, SIGNAL(clicked()),this, SLOT(play()));
 
-	_positionSlider = new QSlider(Qt::Horizontal);
+	_positionSlider = new QSlider(Qt::Horizontal,this);
 	_positionSlider->setRange(0, 0);
 
 	connect(_positionSlider, SIGNAL(sliderMoved(int)),this, SLOT(setPosition(int)));
@@ -50,30 +54,27 @@ MyVideoPlayer::MyVideoPlayer(QWidget *parent)
 	_rateBox->addItem("3", QVariant(3.0));
 	_rateBox->setCurrentIndex(0);
 	
-	QBoxLayout *controlLayout = new QHBoxLayout;
+	
 	controlLayout->setMargin(0);
 	controlLayout->addWidget(openButton);
 	controlLayout->addWidget(_playButton);
 	//controlLayout->addWidget(_positionSlider);
-	controlLayout->addWidget(new QLabel("speed"));
+	controlLayout->addWidget(new QLabel("speed", this));
 	controlLayout->addWidget(_rateBox);
 
 	connect(_rateBox, SIGNAL(activated(int)), SLOT(updateRate()));
 
-	QBoxLayout *InfoLayout = new QHBoxLayout;
 	InfoLayout->addWidget(_positionSlider);
 
-	_currentTime_info = new QLabel("0000");
-	_totalTime_info = new QLabel("0000");
+	_currentTime_info = new QLabel("0000", this);
+	_totalTime_info = new QLabel("0000", this);
 	InfoLayout->addWidget(_currentTime_info);
-	InfoLayout->addWidget(new QLabel("/"));
+	InfoLayout->addWidget(new QLabel("/", this));
 	InfoLayout->addWidget(_totalTime_info);
 	
-
-	QBoxLayout *layout = new QVBoxLayout;
-	layout->addWidget(_videoWidget);
-	layout->addLayout(controlLayout);
-	layout->addLayout(InfoLayout);
+	layout_main->addWidget(_videoWidget);
+	layout_main->addLayout(controlLayout);
+	layout_main->addLayout(InfoLayout);
 	//layout->addWidget(InfoLayout);
 
 	_mediaPlayer.setVideoOutput(_videoWidget);
@@ -82,14 +83,14 @@ MyVideoPlayer::MyVideoPlayer(QWidget *parent)
 	connect(&_mediaPlayer, SIGNAL(durationChanged(qint64)), this, SLOT(durationChanged(qint64)));
 	//connect(&_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(handleError()));
 
-	this->setLayout(layout);
+	this->setLayout(layout_main);
 }
 
 MyVideoPlayer::~MyVideoPlayer()
 {
 }
-/*
-bool MyVideoPlayer::Open_File(const QString &filename)
+
+QString MyVideoPlayer::Open_File(const QString &filename)
 {
 	if (!filename.isEmpty()) {
 		_mediaPlayer.setMedia(QUrl::fromLocalFile(filename));
@@ -97,13 +98,13 @@ bool MyVideoPlayer::Open_File(const QString &filename)
 
 		_positionSlider->setRange(0, _mediaPlayer.duration());
 
-		return true;
+		return filename;
 	}
-	return false;
+	return "";
 }
-*/
 
-bool MyVideoPlayer::Open_File()
+
+QString MyVideoPlayer::Open_File()
 {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open Movie"), QDir::homePath());
 	if (!filename.isEmpty()) {
@@ -114,9 +115,9 @@ bool MyVideoPlayer::Open_File()
 
 		this->play();
 
-		return true;
+		return filename;
 	}
-	return false;
+	return "";
 }
 
 
@@ -124,6 +125,7 @@ bool MyVideoPlayer::Open_File()
 void MyVideoPlayer::setPosition(int position)
 {
 	_mediaPlayer.setPosition(position);
+	emit goto_position_x(position / 1000);
 }
 
 // 视频改变 -》进度条改变
@@ -131,6 +133,12 @@ void MyVideoPlayer::mediapositionChanged(qint64 position)
 {
 	_positionSlider->setValue(position);
 	update_currentTime(position / 1000);
+	emit next_position();
+
+#ifdef _DEBUG
+	qDebug() << "position:"<<position << endl;
+#endif
+	// 该函数是每一秒执行一次。position的值为毫秒MS
 }
 
 
